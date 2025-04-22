@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -24,5 +28,22 @@ public class WebSecurityConfig {
                 .httpBasic();
 
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("anaclara")
+                .password("dio123")
+                .roles("USERS")
+                .build();
+
+        UserDetails manager = User.withDefaultPasswordEncoder()
+                .username("manager")
+                .password("dio123")
+                .roles("MANAGERS")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, manager) ;
     }
 }
